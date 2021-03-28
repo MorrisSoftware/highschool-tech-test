@@ -1,4 +1,4 @@
-package com.vatitstream.highschool.domain;
+package com.vatitstream.highschool.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

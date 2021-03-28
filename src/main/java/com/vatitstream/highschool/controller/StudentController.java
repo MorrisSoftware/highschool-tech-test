@@ -1,6 +1,6 @@
-package com.vatitstream.highschool.web;
+package com.vatitstream.highschool.controller;
 
-import com.vatitstream.highschool.domain.Student;
+import com.vatitstream.highschool.model.Student;
 import com.vatitstream.highschool.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,12 +26,12 @@ public class StudentController {
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public @ResponseBody
-    Student getStudentByFirstName(@PathVariable long studentId) {
+    Student findStudentById(@PathVariable long studentId) {
         return studentService.getStudentByFirstName(studentId);
     }
 
     @GetMapping(params = { "page", "size" })
-    public @ResponseBody List<Student> getStudents(@RequestParam("page") int page,
+    public @ResponseBody List<Student> findAllStudents(@RequestParam("page") int page,
                                                    @RequestParam("size") int size) {
         Page<Student> pageStudents = new PageImpl(
                 studentService.getStudentsPaginated(page, size)

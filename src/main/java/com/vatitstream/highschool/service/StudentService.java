@@ -1,6 +1,6 @@
 package com.vatitstream.highschool.service;
 
-import com.vatitstream.highschool.domain.Student;
+import com.vatitstream.highschool.model.Student;
 import com.vatitstream.highschool.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

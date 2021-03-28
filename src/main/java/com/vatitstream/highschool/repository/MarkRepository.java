@@ -1,6 +1,6 @@
 package com.vatitstream.highschool.repository;
 
-import com.vatitstream.highschool.domain.Mark;
+import com.vatitstream.highschool.model.Mark;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

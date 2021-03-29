@@ -5,22 +5,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.io.Serializable;
 
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Subject {
+public class Subject implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
     private String category;
     private String description;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mark_id")
-    private Mark mark;
 }

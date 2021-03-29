@@ -12,9 +12,9 @@ public class MarkController {
     @Autowired
     private MarkService markService;
 
-    @PostMapping(value = "", produces = "application/json")
+    @PostMapping(value = "", produces = "application/json",params = { "student"})
     public @ResponseBody
-    Mark create(@RequestBody Mark mark){
-        return markService.create(mark);
+    Mark create(@RequestBody Mark mark, @RequestParam int student){
+        return markService.create(mark, student);
     }
 }

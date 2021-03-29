@@ -1,30 +1,34 @@
 package com.vatitstream.highschool.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Mark {
+@Data
+public class Mark implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
     private Student student;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    @OneToOne(mappedBy = "mark",
-            cascade = CascadeType.ALL,
+    @OneToOne(cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     private Subject subject;
     private float score;
 }

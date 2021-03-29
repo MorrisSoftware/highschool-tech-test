@@ -1,5 +1,6 @@
 package com.vatitstream.highschool.controller;
 
+import com.sun.istack.NotNull;
 import com.vatitstream.highschool.model.Student;
 import com.vatitstream.highschool.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/student")
+@RequestMapping("api/students")
 public class StudentController {
 
     @Autowired
@@ -24,10 +25,10 @@ public class StudentController {
         return studentService.create(test);
     }
 
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/{studentId}", produces = "application/json")
     public @ResponseBody
-    Student findStudentById(@PathVariable long studentId) {
-        return studentService.getStudentByFirstName(studentId);
+    Student findStudentById(@PathVariable @NotNull Long studentId) {
+        return studentService.getStudentbyID(studentId);
     }
 
     @GetMapping(params = { "page", "size" })

@@ -23,6 +23,7 @@ public class Mark implements Serializable {
     private long id;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="student_id")
     private Student student;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;

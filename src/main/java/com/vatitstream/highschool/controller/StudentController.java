@@ -1,6 +1,7 @@
 package com.vatitstream.highschool.controller;
 
 import com.sun.istack.NotNull;
+import com.vatitstream.highschool.model.Mark;
 import com.vatitstream.highschool.model.Student;
 import com.vatitstream.highschool.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,13 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping(value = "", produces = "application/json")
-    public @ResponseBody
-    Student addStudent(@RequestBody Student student) {
-        Student test = student;
-        return studentService.create(test);
+    public @ResponseBody Student addStudent(@RequestBody Student student) {
+        return studentService.create(student);
+    }
+
+    @GetMapping(value = "/{student_id}/marks", produces = "application/json")
+    public @ResponseBody List<Mark> addMark(@PathVariable Long student_id) {
+        return studentService.getMarksById(student_id);
     }
 
     @GetMapping(value = "/{studentId}", produces = "application/json")

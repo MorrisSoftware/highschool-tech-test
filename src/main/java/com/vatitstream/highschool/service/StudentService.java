@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,7 +20,11 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private MarkService markService;
+
     public Student create(Student student){
+
         return studentRepository.save(student);
     }
 
@@ -38,9 +43,15 @@ public class StudentService {
         return studentPage;
     }
 
-    public Student addMarkToStudent(int studentID, Mark mark){
-        Student student = getStudentbyID(studentID);
+    public List<Mark> getMarksById(long student_id){
+        return getStudentbyID(student_id).getMarks();
+    }
+
+    public Student addMark(long studentID, Mark mark){
+        Student student = this.getStudentbyID(studentID);
         student.getMarks().add(mark);
+        mark.setStudent(student);
+        markService.create(mark);
         return studentRepository.save(student);
     }
 }

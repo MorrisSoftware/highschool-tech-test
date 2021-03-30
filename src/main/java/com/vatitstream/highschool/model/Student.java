@@ -27,4 +27,5 @@ public class Student implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
     private List<Mark> marks;
+
 }

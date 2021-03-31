@@ -47,11 +47,10 @@ public class StudentService {
         return getStudentbyID(student_id).getMarks();
     }
 
-    public Student addMark(long studentID, Mark mark){
+    public Student addMarkToStudent(long studentID, Mark mark){
         Student student = this.getStudentbyID(studentID);
         student.getMarks().add(mark);
-        mark.setStudent(student);
-        markService.create(mark);
+        markService.create(studentID, mark);
         return studentRepository.save(student);
     }
 }

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Mark implements Serializable {
+public class TestScore implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

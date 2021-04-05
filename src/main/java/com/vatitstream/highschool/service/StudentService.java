@@ -1,6 +1,6 @@
 package com.vatitstream.highschool.service;
 
-import com.vatitstream.highschool.model.Mark;
+import com.vatitstream.highschool.model.TestScore;
 import com.vatitstream.highschool.model.Student;
 import com.vatitstream.highschool.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,17 +21,17 @@ public class StudentService {
     private StudentRepository studentRepository;
 
     @Autowired
-    private MarkService markService;
+    private TestScoreService testScoreService;
 
     public Student addStudent(Student student) {
         return studentRepository.save(student);
     }
 
-    public Student addMarkToStudent(long studentID, Mark newMark) {
+    public Student addTestScoreToStudent(long studentID, TestScore newTestScore) {
         Student student = this.getStudentByID(studentID);
-        student.getMarks().add(newMark);
-        Mark mark = markService.create(newMark);
-        mark.setStudent(student);
+        student.getTestScores().add(newTestScore);
+        TestScore testScore = testScoreService.create(newTestScore);
+        testScore.setStudent(student);
         return studentRepository.save(student);
     }
 
@@ -50,28 +50,28 @@ public class StudentService {
         return studentPage;
     }
 
-    public List<Mark> getMarksByStudent(long student_id) {
-        return getStudentByID(student_id).getMarks();
+    public List<TestScore> getTestScoresByStudent(long student_id) {
+        return getStudentByID(student_id).getTestScores();
     }
 
     public Student updateStudent(Student newStudent) {
         Student student = this.getStudentByID(newStudent.getId());
-        student.setMarks(newStudent.getMarks());
+        student.setTestScores(newStudent.getTestScores());
         student.setClassID(newStudent.getClassID());
         student.setFirstName(newStudent.getFirstName());
         student.setLastName(newStudent.getLastName());
         return studentRepository.save(student);
     }
 
-    public Student updateStudentsMark(long studentID, long markId, Mark newMark) {
+    public Student updateStudentsTestScore(long studentID, long markId, TestScore newTestScore) {
         Student student = this.getStudentByID(studentID);
-        markService.updateMark(markId, newMark);
-        for (int i = 0; i < student.getMarks().size(); i++) {
-            if (student.getMarks().get(i).getId() == markId) {
-                markService.updateMark(markId, newMark);
-                student.getMarks().get(i).setScore(newMark.getScore());
-                student.getMarks().get(i).setSubject(newMark.getSubject());
-                student.getMarks().get(i).setDate(newMark.getDate());
+        testScoreService.updateMark(markId, newTestScore);
+        for (int i = 0; i < student.getTestScores().size(); i++) {
+            if (student.getTestScores().get(i).getId() == markId) {
+                testScoreService.updateMark(markId, newTestScore);
+                student.getTestScores().get(i).setScore(newTestScore.getScore());
+                student.getTestScores().get(i).setSubject(newTestScore.getSubject());
+                student.getTestScores().get(i).setDate(newTestScore.getDate());
                 return studentRepository.save(student);
             }
         }
@@ -83,12 +83,12 @@ public class StudentService {
         studentRepository.delete(student);
     }
 
-    public Student deleteMarkFromStudent(long studentId, long markId) {
+    public Student deleteTestScoreFromStudent(long studentId, long markId) {
         Student student = this.getStudentByID(studentId);
-        markService.deleteMark(markId);
-        for (int i = 0; i < student.getMarks().size(); i++) {
-            if (student.getMarks().get(i).getId() == markId) {
-                student.getMarks().remove(i);
+        testScoreService.deleteMark(markId);
+        for (int i = 0; i < student.getTestScores().size(); i++) {
+            if (student.getTestScores().get(i).getId() == markId) {
+                student.getTestScores().remove(i);
                 return studentRepository.save(student);
             }
         }

@@ -30,19 +30,19 @@ public class Student implements Serializable {
     @Column(name = "marks")
     @JsonManagedReference
     @JsonIgnore
-    @OneToMany(mappedBy = "student",targetEntity=Mark.class, cascade = CascadeType.ALL)
-    private List<Mark> marks;
+    @OneToMany(mappedBy = "student",targetEntity= TestScore.class, cascade = CascadeType.ALL)
+    private List<TestScore> testScores;
 
     public float calculateAverageMark() {
         float averageMark = 0;
-        int numberOfMarks = marks.size();
+        int numberOfMarks = testScores.size();
 
-        if(marks.isEmpty()){
+        if(testScores.isEmpty()){
             return 0;
         }
         else{
             for (int i = 0; i < numberOfMarks; i++) {
-                averageMark += marks.get(i).getScore();
+                averageMark += testScores.get(i).getScore();
             }
 
             return averageMark / numberOfMarks;

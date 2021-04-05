@@ -1,6 +1,6 @@
 package com.vatitstream.highschool;
 
-import com.vatitstream.highschool.model.Mark;
+import com.vatitstream.highschool.model.TestScore;
 import com.vatitstream.highschool.model.Student;
 import com.vatitstream.highschool.repository.StudentRepository;
 import org.springframework.boot.ApplicationRunner;
@@ -23,19 +23,19 @@ public class HighschoolApplication {
 	ApplicationRunner init(StudentRepository repository){
 		return args -> {
 			LocalDate date = LocalDate.now();
-			Mark mark = new Mark();
-			mark.setDate(date);
-			mark.setScore(10);
-			mark.setSubject("test");
+			TestScore testScore = new TestScore();
+			testScore.setDate(date);
+			testScore.setScore(10);
+			testScore.setSubject("test");
 
-			List<Mark> listMarks = new ArrayList<>();
-			listMarks.add(mark);
+			List<TestScore> listTestScores = new ArrayList<>();
+			listTestScores.add(testScore);
 
 			Student student = new Student();
 			student.setFirstName("TestFirst");
 			student.setLastName("TestLast");
 			student.setClassID("10F");
-			student.setMarks(listMarks);
+			student.setTestScores(listTestScores);
 			};
 		};
 }

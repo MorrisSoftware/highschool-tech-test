@@ -1,6 +1,6 @@
 package com.vatitstream.highschool.service;
 
-import com.vatitstream.highschool.model.Mark;
+import com.vatitstream.highschool.model.TestScore;
 import com.vatitstream.highschool.model.Student;
 import com.vatitstream.highschool.repository.StudentRepository;
 import org.junit.Before;
@@ -33,36 +33,36 @@ public class StudentServiceTests {
     StudentRepository mockStudentRepository;
 
     @Mock
-    MarkService mockMarkService;
+    TestScoreService mockTestScoreService;
 
     private Student student_withmarks;
     private Student student_nomarks;
-    private Mark mark;
-    private List<Mark> marks;
+    private TestScore testScore;
+    private List<TestScore> testScores;
 
     @Before
     public void setup(){
-        mark = Mark.builder()
+        testScore = TestScore.builder()
                 .id(1)
                 .score(100)
                 .subject("test")
                 .build();
 
-        marks = new ArrayList<>();
-        marks.add(mark);
+        testScores = new ArrayList<>();
+        testScores.add(testScore);
 
         student_withmarks = Student.builder()
                 .firstName("Test1")
                 .lastName("Test2")
                 .classID("10F")
-                .marks(marks)
+                .testScores(testScores)
                 .build();
 
         student_nomarks = Student.builder()
                 .firstName("Test1")
                 .lastName("Test2")
                 .classID("10F")
-                .marks(new ArrayList<Mark>())
+                .testScores(new ArrayList<TestScore>())
                 .build();
     }
 
@@ -103,7 +103,7 @@ public class StudentServiceTests {
                 .firstName("newFirst")
                 .lastName("newLast")
                 .classID("newClass")
-                .marks(marks)
+                .testScores(testScores)
                 .build();
 
         when(mockStudentRepository.findById(testId)).thenReturn(Optional.of(student_withmarks));
@@ -136,9 +136,9 @@ public class StudentServiceTests {
         long testId = 1;
         when(mockStudentRepository.findById(testId)).thenReturn(Optional.of(student_withmarks));
 
-        List<Mark> resultMarks = studentService.getMarksByStudent(testId);
+        List<TestScore> resultTestScores = studentService.getTestScoresByStudent(testId);
 
-        assertThat(resultMarks, equalTo(student_withmarks.getMarks()));
+        assertThat(resultTestScores, equalTo(student_withmarks.getTestScores()));
     }
 
     @Test
@@ -152,9 +152,9 @@ public class StudentServiceTests {
                 Object[] args = invocation.getArguments();
                 return (Student) args[0];
             }});
-        when(mockMarkService.create(mark)).thenReturn(mark);
+        when(mockTestScoreService.create(testScore)).thenReturn(testScore);
 
-        Student resultStudent = studentService.addMarkToStudent(testId, mark);
+        Student resultStudent = studentService.addTestScoreToStudent(testId, testScore);
 
         assertThat(resultStudent, equalTo(student_withmarks));
     }
@@ -163,20 +163,20 @@ public class StudentServiceTests {
     public void updateStudentsMarkTest(){
 
         long testId = 1;
-        Mark newMark = Mark.builder()
+        TestScore newTestScore = TestScore.builder()
                 .id(1)
                 .score(90)
                 .subject("test")
                 .build();
 
-        List<Mark> newMarksList = new ArrayList<>();
-        newMarksList.add(newMark);
+        List<TestScore> newMarksList = new ArrayList<>();
+        newMarksList.add(newTestScore);
 
         Student updatedStudent = student_nomarks;
-        student_nomarks.setMarks(newMarksList);
+        student_nomarks.setTestScores(newMarksList);
 
         when(mockStudentRepository.findById(testId)).thenReturn(Optional.of(student_withmarks));
-        when(mockMarkService.updateMark(mark.getId(),newMark)).thenReturn(newMark);
+        when(mockTestScoreService.updateMark(testScore.getId(), newTestScore)).thenReturn(newTestScore);
         when(mockStudentRepository.save(any(Student.class))).thenAnswer(new Answer<Student>() {
             @Override
             public Student answer(InvocationOnMock invocation) throws Throwable {
@@ -184,7 +184,7 @@ public class StudentServiceTests {
                 return (Student) args[0];
         }});
 
-        Student result = studentService.updateStudentsMark(testId,mark.getId(),newMark);
+        Student result = studentService.updateStudentsTestScore(testId, testScore.getId(), newTestScore);
 
         assertThat(result, equalTo(updatedStudent));
     }
@@ -201,7 +201,7 @@ public class StudentServiceTests {
                 return (Student) args[0];
             }});
 
-        Student resultStudent = studentService.deleteMarkFromStudent(testId, mark.getId());
+        Student resultStudent = studentService.deleteTestScoreFromStudent(testId, testScore.getId());
 
         assertThat(resultStudent, equalTo(student_nomarks));
     }

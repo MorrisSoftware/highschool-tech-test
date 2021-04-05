@@ -13,7 +13,7 @@
                     <b-td>{{student.firstName}}</b-td>
                    <b-td>{{student.lastName}}</b-td>
                     <b-td>{{student.classID}}</b-td>
-                    <b-td v-for="mark in student.marks" :key="mark.id">{{ mark.subject + ':' +  mark.score}}</b-td>
+                    <b-td v-for="testScore in student.marks" :key="testScore.id">{{ testScore.subject + ':' +  testScore.score}}</b-td>
         </b-tr>
     </b-tbody>
   </b-table-simple>

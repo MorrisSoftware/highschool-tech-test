@@ -1,7 +1,7 @@
 package com.vatitstream.highschool.controller;
 
 import com.sun.istack.NotNull;
-import com.vatitstream.highschool.model.Mark;
+import com.vatitstream.highschool.model.TestScore;
 import com.vatitstream.highschool.model.Student;
 import com.vatitstream.highschool.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +24,24 @@ public class StudentController {
         return studentService.addStudent(student);
     }
 
-    @PostMapping(value = "/{studentId}/marks", produces = "application/json")
-    public @ResponseBody Student addMarktoStudent(@PathVariable long studentId, @RequestBody Mark newMark){
-        return studentService.addMarkToStudent(studentId, newMark);
+    @PostMapping(value = "/{studentId}/testscores", produces = "application/json")
+    public @ResponseBody Student addMarktoStudent(@PathVariable long studentId, @RequestBody TestScore newTestScore){
+        return studentService.addTestScoreToStudent(studentId, newTestScore);
     }
 
-    @GetMapping(value = "/{studentId}/marks", produces = "application/json")
-    public @ResponseBody List<Mark> getMarksByStudent(@PathVariable Long studentId) {
-        return studentService.getMarksByStudent(studentId);
+    @GetMapping(value = "/{studentId}/testscores", produces = "application/json")
+    public @ResponseBody List<TestScore> getTestScoresByStudent(@PathVariable Long studentId) {
+        return studentService.getTestScoresByStudent(studentId);
     }
 
     @GetMapping(value = "/{studentId}", produces = "application/json")
-    public @ResponseBody Student findStudentById(@PathVariable @NotNull Long studentId) {
+    public @ResponseBody Student getStudentById(@PathVariable @NotNull Long studentId) {
         return studentService.getStudentByID(studentId);
     }
 
     @GetMapping(params = { "page", "size" })
     @CrossOrigin(origins = "http://localhost:8080")
-    public @ResponseBody List<Student> findAllStudents(@RequestParam("page") int page,
+    public @ResponseBody List<Student> getAllStudents(@RequestParam("page") int page,
                                                        @RequestParam("size") int size) {
         Page<Student> pageStudents = new PageImpl(
                 studentService.getStudentsPaginated(page, size)
@@ -50,9 +50,9 @@ public class StudentController {
         return pageStudents.getContent();
     }
 
-    @PutMapping(value = "{studentId}/marks/{markId}")
-    public @ResponseBody Student updateMarkByStudent(@PathVariable long studentId, @PathVariable long markId, @RequestBody Mark mark){
-        return studentService.updateStudentsMark(studentId, markId, mark);
+    @PutMapping(value = "{studentId}/testscores/{testScoreId}")
+    public @ResponseBody Student updateTestScoreForStudent(@PathVariable long studentId, @PathVariable long testScoreId, @RequestBody TestScore testScore){
+        return studentService.updateStudentsTestScore(studentId, testScoreId, testScore);
     }
 
     @PutMapping(value = "")
@@ -60,9 +60,9 @@ public class StudentController {
         return studentService.updateStudent(student);
     }
 
-    @DeleteMapping(value = "{studentId}/marks/{markId}")
-    public Student  deleteMarkByStudent(@PathVariable long studentId, @PathVariable long markId){
-        return studentService.deleteMarkFromStudent(studentId, markId);
+    @DeleteMapping(value = "{studentId}/testscores/{testScoreId}")
+    public Student  deleteTestScoreFromStudent(@PathVariable long studentId, @PathVariable long testScoreId){
+        return studentService.deleteTestScoreFromStudent(studentId, testScoreId);
     }
 
     @DeleteMapping(value = "/{studentId}")

@@ -1,8 +1,8 @@
 package com.vatitstream.highschool.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vatitstream.highschool.model.Mark;
 import com.vatitstream.highschool.model.Student;
+import com.vatitstream.highschool.model.TestScore;
 import com.vatitstream.highschool.service.StudentService;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -42,9 +44,9 @@ public class StudentControllerTest {
     private Student student;
     private String studentJson;
 
-    private Mark mark;
-    private List<Mark> marks;
-    private String markJson;
+    private TestScore testScore;
+    private List<TestScore> testScores;
+    private String testScoreJson;
 
     @Before
     public void setup() throws Exception{
@@ -53,22 +55,22 @@ public class StudentControllerTest {
 
         objectMapper = new ObjectMapper();
 
-        mark = Mark.builder()
+        testScore = TestScore.builder()
                 .id(1)
                 .score(100)
                 .subject("test")
                 .build();
 
-        marks = new ArrayList<>();
-        marks.add(mark);
-        markJson = objectMapper.writeValueAsString(mark);
+        testScores = new ArrayList<>();
+        testScores.add(testScore);
+        testScoreJson = objectMapper.writeValueAsString(testScore);
 
         student = Student.builder()
                 .id(1)
                 .firstName("Test1")
                 .lastName("Test2")
                 .classID("10F")
-                .marks(marks)
+                .testScores(testScores)
                 .build();
 
         studentJson = objectMapper.writeValueAsString(student);
@@ -78,33 +80,66 @@ public class StudentControllerTest {
     @Test
     public void addStudentTest() throws Exception {
 
+        when(mockStudentService.addStudent(any())).thenReturn(student);
+
         mvc.perform(post("/api/students")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(studentJson))
-                .andExpect(status().isOk());
-
-        verify(mockStudentService).addStudent(student);
-    }
-
-    @Test
-    public void addMarkToStudentTest() throws Exception{
-
-        when(mockStudentService.addMarkToStudent(anyLong(),any())).thenReturn(student);
-
-        mvc.perform(post("/api/students/1/marks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(markJson))
                 .andExpect(status().isOk())
                 .andExpect(content().json(studentJson));
     }
 
     @Test
-    public void getMarksByStudentTest() throws Exception{
+    public void addTestScoreToStudentTest() throws Exception{
 
-        mvc.perform(get("/api/students/1/marks"))
-                .andExpect(status().isOk());
+        when(mockStudentService.addTestScoreToStudent(anyLong(),any())).thenReturn(student);
 
-        verify(mockStudentService).getMarksByStudent(1);
+        mvc.perform(post("/api/students/1/testscores")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testScoreJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(studentJson));
+
+        verify(mockStudentService).addTestScoreToStudent(1,testScore);
+    }
+
+    @Test
+    public void getStudentByIdTest() throws Exception {
+
+        when(mockStudentService.getStudentByID(anyLong())).thenReturn(student);
+
+        mvc.perform(get("/api/students/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(studentJson));
+
+        verify(mockStudentService).getStudentByID(1);
+    }
+
+    @Test
+    public void getAllStudentsTest() throws Exception{
+
+        List<Student> students = new ArrayList<>();
+        students.add(student);
+        Page<Student> studentPage = new PageImpl(students);
+        String studentsJson = objectMapper.writeValueAsString(students);
+
+        when(mockStudentService.getStudentsPaginated(anyInt(),anyInt())).thenReturn(studentPage);
+
+        mvc.perform(get("/api/students?page=1&size=1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(studentsJson));
+    }
+
+    @Test
+    public void getTestScoresByStudentTest() throws Exception{
+
+        when(mockStudentService.getTestScoresByStudent(anyLong())).thenReturn(testScores);
+
+        mvc.perform(get("/api/students/1/testscores"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(testScores)));
+
+        verify(mockStudentService).getTestScoresByStudent(1);
     }
 
     @Test
@@ -128,13 +163,32 @@ public class StudentControllerTest {
     }
 
     @Test
+    public void updateTestScoreForStudent() throws Exception {
+
+        when(mockStudentService.updateStudentsTestScore(anyLong(),anyLong(),any(TestScore.class))).thenReturn(student);
+
+        mvc.perform(put("/api/students/1/testscores/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testScoreJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(studentJson));
+    }
+
+    @Test
+    public void deleteTestScoreFromStudentTest() throws Exception{
+
+        mvc.perform(delete("/api/students/1/testscores/1"))
+                .andExpect(status().isOk());
+
+        verify(mockStudentService).deleteTestScoreFromStudent(1,1);
+    }
+
+    @Test
     public void deleteStudentTest() throws Exception{
+
         mvc.perform(delete("/api/students/1"))
                 .andExpect(status().isOk());
 
         verify(mockStudentService).deleteStudent(1);
     }
-
-
-
 }

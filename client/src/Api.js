@@ -15,9 +15,11 @@ export default {
     transformResponse: [function (data) {  
       return data? JSON.parse(data) : data;
     }]  
+  },
+  { headers: {"Access-Control-Allow-Origin" : "*"}
   }),
 
-  getItem: (studentID) => instance.get('http://localhost:9000/api/students/'+studentID,{
+  getMarks: (studentID) => instance.get('http://localhost:9000/api/students/'+studentID+'/marks',{
   transformResponse: [function (data) {
   return data? JSON.parse(data) : data;
   }]

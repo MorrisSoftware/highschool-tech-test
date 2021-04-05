@@ -9,10 +9,11 @@
       </b-thead>
 
     <b-tbody>
-        <b-tr v-for="entry in students" :key="entry.id">
-                    <b-td><a href="" :click ="getStudent(entry.id)"> {{entry.firstName}} </a></b-td>
-                    <b-td>{{entry.lastName}}</b-td>
-                    <b-td>{{entry.classID}}</b-td>
+        <b-tr v-for="student in students" :key="student.id">
+                    <b-td>{{student.firstName}}</b-td>
+                   <b-td>{{student.lastName}}</b-td>
+                    <b-td>{{student.classID}}</b-td>
+                    <b-td v-for="mark in student.marks" :key="mark.id">{{ mark.subject + ':' +  mark.score}}</b-td>
         </b-tr>
     </b-tbody>
   </b-table-simple>
@@ -26,7 +27,7 @@ name: 'studentTable',
 data: function(){
   return {
     students: [],
-    columns: ['First Name', 'Last Name', 'Class'],
+    columns: ['First Name', 'Last Name', 'Class', 'Marks'],
   }
 },
 mounted() {

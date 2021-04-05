@@ -30,19 +30,17 @@ public class StudentController {
     }
 
     @GetMapping(value = "/{studentId}/marks", produces = "application/json")
-    public @ResponseBody
-    List<Mark> getMarksByStudent(@PathVariable Long studentId) {
+    public @ResponseBody List<Mark> getMarksByStudent(@PathVariable Long studentId) {
         return studentService.getMarksByStudent(studentId);
     }
 
     @GetMapping(value = "/{studentId}", produces = "application/json")
-    public @ResponseBody
-    Student findStudentById(@PathVariable @NotNull Long studentId) {
+    public @ResponseBody Student findStudentById(@PathVariable @NotNull Long studentId) {
         return studentService.getStudentByID(studentId);
     }
 
     @GetMapping(params = { "page", "size" })
-    @CrossOrigin(origins = "http://localhost:9000")
+    @CrossOrigin(origins = "http://localhost:8080")
     public @ResponseBody List<Student> findAllStudents(@RequestParam("page") int page,
                                                        @RequestParam("size") int size) {
         Page<Student> pageStudents = new PageImpl(

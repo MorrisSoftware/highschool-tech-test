@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -44,9 +44,9 @@ public class StudentControllerTest {
     @Test
     public void testAddStudent() throws Exception {
         Student student = Student.builder()
-                .firstname("Test1")
-                .lastname("Test2")
-                .standard(1)
+                .firstName("Test1")
+                .lastName("Test2")
+                .classID("10F")
                 .build();
         String inputJson = this.mapToJson(student);
 
@@ -55,7 +55,35 @@ public class StudentControllerTest {
                 .content(inputJson))
                 .andExpect(status().isOk());
 
-        verify(mockStudentService).create(student);
+        verify(mockStudentService).addStudent(student);
+    }
+
+    @Test
+    public void testUpdateStudent() throws Exception {
+
+        Student newStudent = Student.builder()
+                .id(1)
+                .firstName("Test1")
+                .lastName("Test2")
+                .classID("10F")
+                .build();
+
+        String newJSON = this.mapToJson(newStudent);
+
+        mvc.perform(put("/api/students")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newJSON))
+                .andExpect(status().isOk());
+
+        verify(mockStudentService).updateStudent(newStudent);
+    }
+
+    @Test
+    public void testDeleteStudent() throws Exception{
+        mvc.perform(delete("/api/students/1"))
+                .andExpect(status().isOk());
+
+        verify(mockStudentService).deleteStudent(1);
     }
 
 }

@@ -22,14 +22,12 @@ public class Mark implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name="student_id")
     private Student student;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    @OneToOne(cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    private Subject subject;
+    private String subject;
     private float score;
+
 }
